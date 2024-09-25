@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "price_entries",
+  "info": {
+    "singularName": "price-entry",
+    "pluralName": "price-entries",
+    "displayName": "PriceEntry",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ean": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "integer",
+      "required": true
+    },
+    "eanType": {
+      "type": "enumeration",
+      "enum": [
+        "ean13",
+        "ean8"
+      ],
+      "required": true
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "price_entries"
+    },
+    "latitude": {
+      "type": "decimal"
+    },
+    "longitude": {
+      "type": "decimal"
+    },
+    "location": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::location.location",
+      "inversedBy": "price_entries"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::product.product",
+      "inversedBy": "price_entries"
+    }
+  }
+}

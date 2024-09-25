@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "locations",
+  "info": {
+    "singularName": "location",
+    "pluralName": "locations",
+    "displayName": "Location"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "price_entries": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::price-entry.price-entry",
+      "private": true,
+      "mappedBy": "location"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "locations"
+    }
+  }
+}

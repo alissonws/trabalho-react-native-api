@@ -362,6 +362,135 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiLocationLocation extends Schema.CollectionType {
+  collectionName: 'locations';
+  info: {
+    singularName: 'location';
+    pluralName: 'locations';
+    displayName: 'Location';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    price_entries: Attribute.Relation<
+      'api::location.location',
+      'oneToMany',
+      'api::price-entry.price-entry'
+    > &
+      Attribute.Private;
+    user: Attribute.Relation<
+      'api::location.location',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::location.location',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::location.location',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPriceEntryPriceEntry extends Schema.CollectionType {
+  collectionName: 'price_entries';
+  info: {
+    singularName: 'price-entry';
+    pluralName: 'price-entries';
+    displayName: 'PriceEntry';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    ean: Attribute.String & Attribute.Required;
+    price: Attribute.Integer & Attribute.Required;
+    eanType: Attribute.Enumeration<['ean13', 'ean8']> & Attribute.Required;
+    user: Attribute.Relation<
+      'api::price-entry.price-entry',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    latitude: Attribute.Decimal;
+    longitude: Attribute.Decimal;
+    location: Attribute.Relation<
+      'api::price-entry.price-entry',
+      'manyToOne',
+      'api::location.location'
+    >;
+    product: Attribute.Relation<
+      'api::price-entry.price-entry',
+      'manyToOne',
+      'api::product.product'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::price-entry.price-entry',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::price-entry.price-entry',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiProductProduct extends Schema.CollectionType {
+  collectionName: 'products';
+  info: {
+    singularName: 'product';
+    pluralName: 'products';
+    displayName: 'Product';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    ean: Attribute.String & Attribute.Required & Attribute.Unique;
+    photoPath: Attribute.String;
+    price_entries: Attribute.Relation<
+      'api::product.product',
+      'oneToMany',
+      'api::price-entry.price-entry'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::product.product',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::product.product',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -695,7 +824,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     username: Attribute.String &
@@ -723,6 +851,16 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'plugin::users-permissions.user',
       'manyToOne',
       'plugin::users-permissions.role'
+    >;
+    price_entries: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::price-entry.price-entry'
+    >;
+    locations: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::location.location'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -798,6 +936,9 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::location.location': ApiLocationLocation;
+      'api::price-entry.price-entry': ApiPriceEntryPriceEntry;
+      'api::product.product': ApiProductProduct;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
