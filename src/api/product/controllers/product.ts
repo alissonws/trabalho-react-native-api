@@ -43,7 +43,6 @@ export default factories.createCoreController(
       if (token) {
         const productData = await fetchProductData(barcode, token);
 
-        console.log("productData: ", productData, typeof productData);
         ctx.body = productData;
       } else {
         ctx.throw(401, "Unable to authenticate to third-party API");
